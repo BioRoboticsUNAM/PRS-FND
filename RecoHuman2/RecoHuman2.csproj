@@ -1,0 +1,333 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{77BEF9D4-8B81-4C92-9E47-9C33C4DA2B14}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>RecoHuman</RootNamespace>
+    <AssemblyName>RecoHuman</AssemblyName>
+    <ApplicationIcon>Resources\DigitalFace2.ico</ApplicationIcon>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>2.0</OldToolsVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Neurotec, Version=2.4.1.0, Culture=neutral, PublicKeyToken=ea4ecf06177ea613, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>.\Neurotec.dll</HintPath>
+    </Reference>
+    <Reference Include="Neurotec.Biometrics.NLRecord, Version=1.0.0.0, Culture=neutral, PublicKeyToken=ea4ecf06177ea613, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>.\Neurotec.Biometrics.NLRecord.dll</HintPath>
+    </Reference>
+    <Reference Include="Neurotec.Biometrics.VLExtractor, Version=3.1.0.0, Culture=neutral, PublicKeyToken=ea4ecf06177ea613, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>.\Neurotec.Biometrics.VLExtractor.dll</HintPath>
+    </Reference>
+    <Reference Include="Neurotec.Biometrics.VLMatcher, Version=3.1.0.0, Culture=neutral, PublicKeyToken=ea4ecf06177ea613, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>.\Neurotec.Biometrics.VLMatcher.dll</HintPath>
+    </Reference>
+    <Reference Include="Neurotec.Cameras.CameraMan, Version=1.0.2.2, Culture=neutral, PublicKeyToken=ea4ecf06177ea613, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>.\Neurotec.Cameras.CameraMan.dll</HintPath>
+    </Reference>
+    <Reference Include="Neurotec.Images, Version=2.2.1.1, Culture=neutral, PublicKeyToken=ea4ecf06177ea613, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>.\Neurotec.Images.dll</HintPath>
+    </Reference>
+    <Reference Include="Robotics, Version=0.8.14.22, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Robotics\Robotics\bin\Release\Robotics.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.ServiceProcess" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Sources\CameraAdapter.cs" />
+    <Compile Include="CommandExecuters\PfAuto.cs" />
+    <Compile Include="CommandExecuters\PfFind.cs" />
+    <Compile Include="CommandExecuters\PfRemember.cs" />
+    <Compile Include="CommandExecuters\PfShutdown.cs" />
+    <Compile Include="CommandExecuters\PfSleep.cs" />
+    <Compile Include="CtrlCamSettings.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="CtrlCamSettings.Designer.cs">
+      <DependentUpon>CtrlCamSettings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CtrlDetectedFace.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="CtrlDetectedFace.Designer.cs">
+      <DependentUpon>CtrlDetectedFace.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CtrlKnownFace.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="CtrlKnownFace.Designer.cs">
+      <DependentUpon>CtrlKnownFace.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CtrlRecognitionResult.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="CtrlRecognitionResult.Designer.cs">
+      <DependentUpon>CtrlRecognitionResult.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CtrlSettingsPannel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="CtrlSettingsPannel.Designer.cs">
+      <DependentUpon>CtrlSettingsPannel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Face.cs" />
+    <Compile Include="FaceCollection.cs" />
+    <Compile Include="HumanRecognizer.cs" />
+    <Compile Include="Sources\ICamera.cs" />
+    <Compile Include="Sources\IImageSource.cs" />
+    <Compile Include="Sources\ImageSourceCollection.cs" />
+    <Compile Include="Sources\ImageSourceManager.cs" />
+    <Compile Include="Sources\IWebCamAdapter.cs" />
+    <Compile Include="RecognitionResult.cs" />
+    <Compile Include="RecoHumanSettigs.cs" />
+    <Compile Include="SavedFace.cs" />
+    <Compile Include="FrmRecoHuman2.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmRecoHuman2.Designer.cs">
+      <DependentUpon>FrmRecoHuman2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="CtrlCamSettings.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>CtrlCamSettings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CtrlDetectedFace.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>CtrlDetectedFace.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CtrlKnownFace.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>CtrlKnownFace.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CtrlRecognitionResult.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>CtrlRecognitionResult.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CtrlSettingsPannel.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>CtrlSettingsPannel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmRecoHuman2.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>FrmRecoHuman2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="Sources\Sources.cs" />
+    <Compile Include="Sources\VerilookWebCam.cs" />
+    <Compile Include="Sources\VeriLookWebCamAdapter.cs" />
+    <Compile Include="VideoControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="VideoControl.Designer.cs">
+      <DependentUpon>VideoControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Sources\VideoFormat.cs" />
+    <Compile Include="Sources\VideoPipeAdapter.cs" />
+    <Compile Include="Sources\WIACameraAdapter.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\cross48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\DigitalFace_128.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\DigitalFace2_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\DigitalFace2_48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\DigitalFace2_16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\DigitalFace2_24.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\DigitalFace2_128.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\DigitalFace_16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\DigitalFace_48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\DigitalFace_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\DigitalFace2.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\DigitalFace.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ok16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\err16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\DeleteHS.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\openHS.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\PrintPreviewHS.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\PropertiesHS.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\RecordHS.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\RepeatHS.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\saveHS.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SaveAllHS.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\DeleteFolderHS.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MoveToFolderHS.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 2.0 %28x86%29</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.0 %28x86%29</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="WIA">
+      <Guid>{94A0E92D-43C0-494E-AC29-FD45948A5221}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+    </COMReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
