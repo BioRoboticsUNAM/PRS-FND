@@ -24,7 +24,7 @@ namespace RecoHuman.Sources
 	/// <summary>
 	/// Represents the method that will handle the ImageProduced event of a IImageSource object
 	/// </summary>
-	/// <param name="source"></param>
+	/// <param name="source">The source object on which the image was produced</param>
 	public delegate void ImageProducedEventHandler(IImageSource source);
 
 	/// <summary>

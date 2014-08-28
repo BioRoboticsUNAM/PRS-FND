@@ -1128,13 +1128,17 @@ namespace RecoHuman
 		/// <param name="detectedFaces">Collection of detected faces</param>
 		protected bool Detect(out FaceCollection detectedFaces)
 		{
+			Bitmap bmp;
 			detectedFaces = new FaceCollection();
 			if (!VLExtractor.IsRegistered) return false;
 			if (!VLMatcher.IsRegistered) return false;
 			sleepCapture = false;
 			//NImage image = capturedImages.Consume();
-			NImage image = NImage.FromBitmap(imageSource.GetImage(100));
-			if (image == null) return false;
+			if ((bmp = imageSource.GetImage(100)) == null)
+				return false;
+			NImage image = NImage.FromBitmap(bmp);
+			if (image == null)
+				return false;
 
 			VleFace[] vlFaces;
 			NGrayscaleImage grayImage;

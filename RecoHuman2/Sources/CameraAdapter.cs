@@ -65,7 +65,8 @@ namespace RecoHuman.Sources
 		/// </summary>
 		public CameraAdapter()
 		{
-			oLock = new Object();
+			this.oLock = new Object();
+			this.imageCapturedEvent = new AutoResetEvent(false);
 		}
 
 		#endregion

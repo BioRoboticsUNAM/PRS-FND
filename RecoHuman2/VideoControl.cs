@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Data;
 using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 
 using Neurotec.Biometrics;
@@ -39,6 +40,10 @@ namespace RecoHuman
 		/// Array of pens for enclose faces
 		/// </summary>
 		private Pen[] translucidPens;
+		/// <summary>
+		/// Synchronizes the access to the image variable
+		/// </summary>
+		private ReaderWriterLock rwImageLock;
 
 		#endregion
 
@@ -50,6 +55,8 @@ namespace RecoHuman
 		public VideoControl()
 		{
 			InitializeComponent();
+			this.DoubleBuffered = true;
+			this.rwImageLock = new ReaderWriterLock();
 			this.image = null;
 			this.drawString = null;
 			this.faces = null;
@@ -110,11 +117,18 @@ namespace RecoHuman
 		/// </summary>
 		public Bitmap Image
 		{
-			get { return image; }
+			get
+			{
+				Bitmap copy;
+				rwImageLock.AcquireReaderLock(-1);
+				copy = (image != null) ? new Bitmap(image) : null;
+				rwImageLock.ReleaseReaderLock();
+				return copy;
+			}
 			set
 			{
 				//if (value == null) return;
-
+				rwImageLock.AcquireWriterLock(-1);
 				Bitmap lastImage = this.image;
 
 				this.image = value;
@@ -126,6 +140,7 @@ namespace RecoHuman
 
 				if (lastImage != null)
 					lastImage.Dispose();
+				rwImageLock.ReleaseWriterLock();
 			}
 		}
 
@@ -170,14 +185,34 @@ namespace RecoHuman
 
 		#region Methods
 
-		protected override void OnPaint(PaintEventArgs e)
+		private void DrawDetectionCandidates(Graphics g)
 		{
-			Graphics g = e.Graphics;
 			Pen pen;
+			for (int i = 0; i < detectionDetails.Length; ++i)
+			{
+				if (i > 10) pen = new Pen(Color.FromArgb(128, Color.Gray), 2);//if more than 11 faces found
+				else pen = translucidPens[i];
+				if (detectionDetails[i].FaceAvailable)
+				{
+					g.DrawRectangle(pen, detectionDetails[i].Face.Rectangle);
+					g.DrawString(
+						detectionDetails[i].Face.Confidence.ToString("0.00"),
+						new Font(this.Font.FontFamily, 10),
+						new SolidBrush(Color.GreenYellow),
+						detectionDetails[i].Face.Rectangle.X,
+						detectionDetails[i].Face.Rectangle.Y + detectionDetails[i].Face.Rectangle.Height + 4);
+				}
+				if (detectionDetails[i].EyesAvailable)
+				{
+					g.DrawLine(pen, detectionDetails[i].Eyes.First, detectionDetails[i].Eyes.Second);
+				}
+			}
+		}
 
-			// Draw image base
-			#region Draw image base
-			if (image != null)
+		private void DrawImageBase(Graphics g)
+		{
+			rwImageLock.AcquireReaderLock(-1);
+			try
 			{
 				//g.DrawImage(image, 0, 0, image.Width, image.Height);
 				g.DrawImage(image, 0, 0, this.Width, this.Height);
@@ -186,80 +221,76 @@ namespace RecoHuman
 				g.DrawLine(Pens.Black, 0, image.Height / 2, image.Width, image.Height / 2);
 				g.DrawLine(Pens.Black, image.Width / 2, 0, image.Width / 2, image.Height);
 			}
+			catch { }
+			rwImageLock.ReleaseReaderLock();
+		}
 
-			#endregion
-
-			#region Draw faces rectangles
-			if (this.faces != null)
+		private void DrawRectanglesForFaces(Graphics g)
+		{
+			Pen pen;
+			for (int i = 0; i < faces.Length; ++i)
 			{
+
+				if (i > 10) pen = new Pen(Color.Yellow, 2);//if more than 11 faces found
+				else pen = pens[i];
+				g.DrawRectangle(pens[i], faces[i].Rectangle);
+				g.DrawString(
+					faces[0].Confidence.ToString("0.00"),
+					new Font(this.Font.FontFamily, 10),
+					new SolidBrush(pen.Color),
+					faces[0].Rectangle.X,
+					faces[0].Rectangle.Y + faces[0].Rectangle.Height + 4
+				);
+			}
+		}
+
+		protected override void OnPaint(PaintEventArgs e)
+		{
+			Graphics g = e.Graphics;
+
+			try
+			{
+				// Draw image base
+				if (image != null)
+					DrawImageBase(g);
+
 				// Enclose all detected faces
-				for (int i = 0; i < faces.Length; ++i)
-				{
+				if (this.faces != null)
+					DrawRectanglesForFaces(g);
+				// if no faces are detected, show the posible detection
+				else if (detectionDetails != null)
+					DrawDetectionCandidates(g);
 
-					if (i > 10) pen = new Pen(Color.Yellow, 2);//if more than 11 faces found
-					else pen = pens[i];
-					g.DrawRectangle(pens[i], faces[i].Rectangle);
-					g.DrawString(
-						faces[0].Confidence.ToString("0.00"),
-						new Font(this.Font.FontFamily, 10),
-						new SolidBrush(pen.Color),
-						faces[0].Rectangle.X,
-						faces[0].Rectangle.Y + faces[0].Rectangle.Height + 4
-					);
-				}
+				if (drawString != null)
+					g.DrawString(drawString, new Font(this.Font.FontFamily, 18), new SolidBrush(Color.Red), 10, 10);
 			}
-			#endregion
-			// if no faces are detected, show the posible detection
-			#region no faces are detected, show the posible detection
-			else if (detectionDetails != null)
-			{
-				for (int i = 0; i < detectionDetails.Length; ++i)
-				{
-					if (i > 10) pen = new Pen(Color.FromArgb(128, Color.Gray), 2);//if more than 11 faces found
-					else pen = translucidPens[i];
-					if (detectionDetails[i].FaceAvailable)
-					{
-						g.DrawRectangle(pen, detectionDetails[i].Face.Rectangle);
-						g.DrawString(
-							detectionDetails[i].Face.Confidence.ToString("0.00"),
-							new Font(this.Font.FontFamily, 10),
-							new SolidBrush(Color.GreenYellow),
-							detectionDetails[i].Face.Rectangle.X,
-							detectionDetails[i].Face.Rectangle.Y + detectionDetails[i].Face.Rectangle.Height + 4);
-					}
-					if (detectionDetails[i].EyesAvailable)
-					{
-						g.DrawLine(pen, detectionDetails[i].Eyes.First, detectionDetails[i].Eyes.Second);
-					}
-				}
-			}
-			#endregion
-
-			if (drawString != null)
-			{
-				g.DrawString(drawString, new Font(this.Font.FontFamily, 18), new SolidBrush(Color.Red), 10, 10);
-			}
-
+			catch { }
 			base.OnPaint(e);
 		}
 
 		protected override void OnPaintBackground(PaintEventArgs e) 
 		{
 			Rectangle rec = e.ClipRectangle;
-			if (image != null)
+			rwImageLock.AcquireReaderLock(-1);
+			try
 			{
-				Rectangle rec1 = new Rectangle(image.Width, 0, rec.Width - image.Width, rec.Height);
-				Rectangle rec2 = new Rectangle(0, image.Height, image.Width, rec.Height - image.Height);
-				using (Brush br = new SolidBrush(this.BackColor))
+				if (image != null)
 				{
-					e.Graphics.FillRectangle(br, rec1);
-					e.Graphics.FillRectangle(br, rec2);
+					Rectangle rec1 = new Rectangle(image.Width, 0, rec.Width - image.Width, rec.Height);
+					Rectangle rec2 = new Rectangle(0, image.Height, image.Width, rec.Height - image.Height);
+					using (Brush br = new SolidBrush(this.BackColor))
+					{
+						e.Graphics.FillRectangle(br, rec1);
+						e.Graphics.FillRectangle(br, rec2);
+					}
+				}
+				else
+				{
+					base.OnPaintBackground(e);
 				}
 			}
-			else
-			{
-				base.OnPaintBackground(e);
-			}
+			catch { }
+			rwImageLock.ReleaseReaderLock();
 		}
 
 		#endregion
